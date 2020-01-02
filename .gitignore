@@ -112,3 +112,4 @@ temp/
 *.env
 
 # End of https://www.gitignore.io/api/node
+config/config.env
