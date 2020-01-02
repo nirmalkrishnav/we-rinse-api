@@ -9,20 +9,17 @@ const stroreSchema = new mongoose.Schema({
         trim: true,
         maxlength: [20, 'store id must be less than 20 characters'],
     },
-    address: {
-        type: String,
-        required: [true, 'Please add an address'],
-    },
     location: {
         type: {
             type: String,
-            enum: ['Point']
+            enum: ['Point'],
         },
         coordinates: {
             type: [Number],
             index: '2dsphere'
         },
         formattedAddress: String,
+        zipcode: String,
     },
     createdAt: {
         type: Date,
@@ -33,16 +30,17 @@ const stroreSchema = new mongoose.Schema({
 // geo Coder
 
 stroreSchema.pre('save', async function (next) {
-    const loc = await geoCoder.geocode(this.address);
-    console.log(loc)
+    const loc = await geoCoder.reverse({
+        lat: this.location.coordinates[0], lon: this.location.coordinates[1]
+    });
+    console.log(loc);
     this.location = {
-        type: 'Point',
-        coordinates: [loc[0].longitude, loc[0].latitude],
-        formattedAddress: loc[0].formattedAddress
+        formattedAddress: loc[0].formattedAddress,
+        coordinates: [loc[0].longitude, loc[0].longitude],
+        zipcode: loc[0].zipcode
     }
-
-    this.address = undefined;
     next();
+
 });
 
 module.exports = mongoose.model('Store', stroreSchema);
