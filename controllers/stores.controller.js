@@ -22,7 +22,7 @@ exports.getStores = async (req, res, next) => {
 // @acess public
 exports.addStore = async (req, res, next) => {
     try {
-        console.log(ryeq.bod);
+        console.log(req.body);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: err });
