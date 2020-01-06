@@ -17,6 +17,8 @@ connectDB();
 app.use(cors());
 
 // Routes
+app.get('/ulle', (req, res) => res.send('veliye'))
+
 app.use('/api/v1/stores', require('./routes/stores.routes'));
 
 const PORT = process.env.PORT || 27015;

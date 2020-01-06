@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
 const geoCoder = require('../utils/geocoder.util');
+const uuidv5 = require('uuid/v5');
+const appUuidNamespace = process.env.APP_UUID;
 
 const stroreSchema = new mongoose.Schema({
-    storeId: {
-        type: String,
-        required: [true, 'Please add a store id'],
-        unique: true,
-        trim: true,
-        maxlength: [20, 'store id must be less than 20 characters'],
-    },
     location: {
         type: {
             type: String,
@@ -36,7 +31,7 @@ stroreSchema.pre('save', async function (next) {
     console.log(loc);
     this.location = {
         formattedAddress: loc[0].formattedAddress,
-        coordinates: [loc[0].longitude, loc[0].longitude],
+        coordinates: this.location.coordinates,
         zipcode: loc[0].zipcode
     }
     next();
