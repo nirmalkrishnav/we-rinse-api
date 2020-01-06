@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const geoCoder = require('../utils/geocoder.util');
-const uuidv5 = require('uuid/v5');
-const appUuidNamespace = process.env.APP_UUID;
 
 const stroreSchema = new mongoose.Schema({
     location: {
