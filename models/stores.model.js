@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 const geoCoder = require('../utils/geocoder.util');
 
 const stroreSchema = new mongoose.Schema({
+    storeId: {
+        type: String,
+        required: [true, 'Please add a store id'],
+        unique: false,
+        trim: true,
+    },
     location: {
         type: {
             type: String,

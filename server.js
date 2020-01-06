@@ -14,7 +14,20 @@ app.use(express.json());
 connectDB();
 
 //cors
-app.use(cors());
+
+const whitelist = ['http://localhost:3000', 'https://werinse.herokuapp.com/']
+const corsOptions = {
+    credentials: true,
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+}
+
+app.use(cors(corsOptions))
 
 // Routes
 app.get('/ulle', (req, res) => res.status(200).json({
