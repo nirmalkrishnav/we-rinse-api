@@ -6,11 +6,11 @@ const storeModel = require('../models/stores.model');
 exports.getStores = async (req, res, next) => {
     try {
         const stores = await storeModel.find();
-
+        const location = stores.map(m => m.location)
         return res.status(200).json({
             success: true,
             count: stores.length,
-            data: stores
+            data: location
         })
     } catch (err) {
         console.log(err);
