@@ -6,6 +6,7 @@ const storeModel = require('../models/stores.model');
 exports.getStores = async (req, res, next) => {
     try {
         const stores = await storeModel.find();
+
         return res.status(200).json({
             success: true,
             count: stores.length,

@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const geoCoder = require('../utils/geocoder.util');
 
 const stroreSchema = new mongoose.Schema({
+    type: {
+        type: String,
+        enum: ['Feature']
+    },
     storeId: {
         type: String,
         required: [true, 'Please add a store id'],
@@ -13,12 +17,20 @@ const stroreSchema = new mongoose.Schema({
             type: String,
             enum: ['Point'],
         },
-        coordinates: {
-            type: [Number],
-            index: '2dsphere'
+        properties: {
+            type: Object,
+            id: { type: String },
+            mag: { type: Number },
+            time: { type: Number },
+            tsunami: { type: Number }
         },
-        formattedAddress: String,
-        zipcode: String,
+        geometry: {
+            type: Object,
+            coordinates: {
+                type: [Number],
+                index: '2dsphere'
+            },
+        }
     },
     createdAt: {
         type: Date,
@@ -29,14 +41,13 @@ const stroreSchema = new mongoose.Schema({
 // geo Coder
 
 stroreSchema.pre('save', async function (next) {
+    console.log(this.location);
     const loc = await geoCoder.reverse({
-        lat: this.location.coordinates[0], lon: this.location.coordinates[1]
+        lat: this.location.geometry.coordinates[0], lon: this.location.geometry.coordinates[1]
     });
-    console.log(loc);
     this.location = {
-        formattedAddress: loc[0].formattedAddress,
-        coordinates: this.location.coordinates,
-        zipcode: loc[0].zipcode
+        geometry: this.location.geometry,
+        properties: this.location.properties
     }
     next();
 
